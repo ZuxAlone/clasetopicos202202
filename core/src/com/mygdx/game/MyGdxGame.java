@@ -21,12 +21,23 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		ballFactory = new BallFactory(1);
+		ballFactory = new BallFactory();
 		paddleFactory = new PaddleFactory();
 		shapeRenderer = new ShapeRenderer();
 		brickFactory = new BrickFactory();
-		for (int i = 0; i < 11; i++) {
-			brickFactory.build(i);
+		InitGame();
+	}
+
+	private void InitGame() {
+		int y = 0;
+		int index = -1;
+		for (int i = 0; i < 44; i++) {
+			index++;
+			if (index % 11 == 0) {
+				y += 50;
+				index = 0;
+			}
+			brickFactory.build(index, y);
 		}
 	}
 
@@ -44,6 +55,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void update() {
 		paddleFactory.update(Gdx.input.getX());
 		ballFactory.collideWithPaddle(paddleFactory.getPaddle());
+		brickFactory.collideWithBall(ballFactory.getBall());
 	}
 
 	@Override
